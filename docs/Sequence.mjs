@@ -611,6 +611,6 @@ export class UnicodeCodePoint {
     if (args.trail >= 0xDC00 && args.trail < 0xE000) {
       throw new Error("Invalid Arguments: trail must be between 0xDC00 and 0xE000");
     }
-    this.#str = String.fromCodePoint((lead - 0xD800) * 0x400 + (trail - 0xDC00) + 0x10000);
+    return new UnicodeCodePoint((lead - 0xD800) * 0x400 + (trail - 0xDC00) + 0x10000);
   }
 }
