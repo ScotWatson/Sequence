@@ -589,4 +589,28 @@ export class UnicodeCodePoint {
   static isEqual(args, arg2) {
     return (args.#str === arg2.#str);
   }
+  static fromSurrogatePair(args) {
+    if (!isBareObject(args)) {
+      throw new Error("Invalid Arguments");
+    }
+    if (!(args.hasOwnProperty("lead"))) {
+      throw new Error("Invalid Arguments");
+    }
+    if (typeof args.lead !== "number") {
+      throw new Error("Invalid Arguments: lead must be a number");
+    }
+    if (args.lead >= 0xD800 && args.lead < 0xDC00) {
+      throw new Error("Invalid Arguments: lead must be between 0xD800 and 0xDC00");
+    }
+    if (!(args.hasOwnProperty("trail"))) {
+      throw new Error("Invalid Arguments");
+    }
+    if (typeof args.trail !== "number") {
+      throw new Error("Invalid Arguments: trail must be a number");
+    }
+    if (args.trail >= 0xDC00 && args.trail < 0xE000) {
+      throw new Error("Invalid Arguments: trail must be between 0xDC00 and 0xE000");
+    }
+    this.#str = String.fromCodePoint((lead - 0xD800) * 0x400 + (trail - 0xDC00) + 0x10000);
+  }
 }
